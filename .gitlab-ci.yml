@@ -42,7 +42,8 @@ code-testing:
         # Authenticate to the Dev Hub using the server key
         - sfdx force:auth:jwt:grant --setdefaultdevhubusername --clientid $SF_CONSUMER_KEY --jwtkeyfile assets/server.key --username $SF_USERNAME
         # Create scratch org
-        - sfdx force:org:create --setdefaultusername --definitionfile config/project-scratch-def.json --wait 10 --durationdays 7
+        - export SF_SCRATCH_ORG_USER="$(eval sfdx force:user:display --targetusername $SCRATCH_ORG_ALIAS --json | jq -r '.result.username')"
+        - sfdx force:data:record:update -s User -v "LanguageLocaleKey='en_US'" -w "Username='$SF_SCRATCH_ORG_USER'"
         - sfdx force:org:display
         # Push source to scratch org (this is with source code, all files, etc)
         - sfdx force:source:push
