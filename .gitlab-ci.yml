@@ -7,7 +7,7 @@
 #
 before_script:
     # Decrypt server key
-    - openssl enc -aes-256-cbc -md sha256 -salt -d -in assets/server.key.enc -out assets/server.key -k $SERVER_KEY_PASSWORD -pbkdf2
+    - openssl enc -aes-256-cbc -md sha256 -salt -d -in assets/server.key.enc -out assets/server.key -k $SERVER_KEY_PASSWORD
     # Install jq, a json parsing library
     - apt update && apt -y install jq
     # Setup SFDX environment variables
