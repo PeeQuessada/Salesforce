@@ -43,8 +43,10 @@ code-testing:
         # Authenticate to the Dev Hub using the server key
         - sfdx force:auth:jwt:grant --setdefaultdevhubusername --clientid $SF_CONSUMER_KEY --jwtkeyfile assets/server.key --username $SF_USERNAME
         # Create scratch org
-        - sfdx force:org:create --setdefaultusername --setalias SCRATCH_ORG_ALIAS --definitionfile config/project-scratch-def.json --wait 10 --durationdays 7
+        - sfdx force:org:create --setdefaultusername --setalias $SCRATCH_ORG_ALIAS --definitionfile config/project-scratch-def.json --wait 10 --durationdays 7
+        # Get the user name created
         - export SF_SCRATCH_ORG_USER="$(eval sfdx force:user:display --targetusername $SCRATCH_ORG_ALIAS --json | jq -r '.result.username')"
+        # Update the locale of the current user
         - sfdx force:data:record:update -s User -v "LanguageLocaleKey='en_US'" -w "Username='$SF_SCRATCH_ORG_USER'"
         - sfdx force:org:display
         # Push source to scratch org (this is with source code, all files, etc)
@@ -102,11 +104,17 @@ integration-testing:
         - sfdx force:user:permset:assign --permsetname DreamHouse
         # Add sample data into app
         - sfdx force:data:tree:import --plan data/sample-data-plan.json
-        # Run unit tests in scratch org
-        - sfdx force:apex:test:run --wait 10 --resultformat human --codecoverage --testlevel RunLocalTests
+        
         # Get the username for the scratch org
         - export SCRATCH_ORG_USERNAME="$(eval sfdx force:user:display --json | jq -r '.result.username')"
         - echo "$SCRATCH_ORG_USERNAME" > ./SCRATCH_ORG_USERNAME.TXT
+        
+        # Update the locale of the current user
+        - sfdx force:data:record:update -s User -v "LanguageLocaleKey='en_US'" -w "Username='$SCRATCH_ORG_USERNAME'"
+        
+        # Run unit tests in scratch org
+        - sfdx force:apex:test:run --wait 10 --resultformat human --codecoverage --testlevel RunLocalTests
+        
         # Generate a new password for the scrach org
         - sfdx force:user:password:generate
         - echo -e "\n\n\n\n"
