@@ -13,11 +13,7 @@
     </flexiPageRegions>
     <flexiPageRegions>
         <componentInstances>
-            <componentInstanceProperties>
-                <name>pageSize</name>
-                <value>8</value>
-            </componentInstanceProperties>
-            <componentName>PropertyTileList</componentName>
+            <componentName>PropertyListMap</componentName>
         </componentInstances>
         <name>center</name>
         <type>Region</type>
