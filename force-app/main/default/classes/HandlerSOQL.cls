@@ -9,7 +9,7 @@ public with sharing class HandlerSOQL implements BotHandler {
         for (sObject o : objects) {
             List<BotField> fields = new List<BotField>();
             Map<String, Object> fieldMap = o.getPopulatedFieldsAsMap();
-            System.debug('fieldMap ' + fieldMap); 
+            System.debug('fieldMap ' + fieldMap);
             for (String fieldName : fieldMap.keySet()) {
                 String linkURL;
                 String objectType;
